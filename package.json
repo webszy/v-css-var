@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/webszy/webpack-auto-zip.git"
+    "url": "git+https://github.com/webszy/v-css-var.git"
   },
   "bugs": {
-    "url": "https://github.com/webszy/webpack-auto-zip/issues"
+    "url": "https://github.com/webszy/v-css-var/issues"
   },
-  "homepage": "https://github.com/webszy/webpack-auto-zip#readme",
+  "homepage": "https://github.com/webszy/v-css-var#readme",
   "keywords": ["vue","CSS Variables"],
   "author": "webszy",
   "license": "ISC"
