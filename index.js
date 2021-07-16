@@ -1,9 +1,9 @@
-/* eslint-disable no-useless-return,no-useless-escape,camelcase,semi,no-cond-assign */
+/* eslint-disable no-useless-return,no-useless-escape,camelcase,semi,no-cond-assign,no-unused-vars */
 const env = process.env.NODE_ENV
 const handleVars = (varItem, addPrefix) => {
   varItem = varItem.map(e => e + '')
   if (addPrefix) {
-    varItem[0] = '--' + varItem[0]
+    varItem[0] = '--' + varItem[0].replace('--', '')
   }
   return {
     varsName: varItem[0],
@@ -48,15 +48,25 @@ export default {
           const dom = binding.modifiers.root ? document.documentElement : el
           logger('cssVar updated')
           // get all cssVars in the dom
+          const styleList = dom.style.cssText.split(';').map(e => e.split(':')).filter(e => e[0] !== '')
           const vars = Object.entries(binding.value)
-          for (const k of vars) {
-            const {
-              varsName,
-              varsValue
-            } = handleVars(k, options.prefix)
-            const oldValue = dom.style.getPropertyValue(varsName)
-            if (oldValue !== varsValue) {
-              dom.style.setProperty(varsName, varsValue)
+          // 更新当前变量
+          if (vars.length > 0) {
+            for (const k of vars) {
+              const {
+                varsName,
+                varsValue
+              } = handleVars(k, options.prefix)
+              const oldValue = document.body.style.getPropertyValue(varsName)
+              if (oldValue !== varsValue) {
+                dom.style.setProperty(varsName, varsValue)
+              }
+            }
+          }
+          for (const k of styleList) {
+            const key = options.prefix ? k[0].replace('--', '') : k[0]
+            if (!vars.find(e => e[0] === key)) {
+              dom.style.removeProperty(k[0])
             }
           }
         }
