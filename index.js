@@ -1,23 +1,20 @@
 /* eslint-disable no-useless-return,no-useless-escape,camelcase,semi,no-cond-assign,no-unused-vars */
 const env = process.env.NODE_ENV
-const handleVars = (varItem, addPrefix) => {
+const handleVars = (varItem) => {
   varItem = varItem.map(e => e + '')
-  if (addPrefix) {
-    varItem[0] = '--' + varItem[0].replace('--', '')
-  }
   return {
-    varsName: varItem[0],
+    varsName: '--' + varItem[0].replace('--', ''),
     varsValue: varItem[1]
   }
 }
-const changeVars = (el, binding, prefix) => {
+const changeVars = (el, binding) => {
   const vars = Object.entries(binding.value)
   const dom = binding.modifiers.root ? document.documentElement : el
   for (const k of vars) {
     const {
       varsName,
       varsValue
-    } = handleVars(k, prefix)
+    } = handleVars(k)
     dom.style.setProperty(varsName, varsValue)
   }
   logger('changeVars', vars)
@@ -39,7 +36,7 @@ export default {
           if (!binding.value) {
             return
           }
-          changeVars(el, binding, options.prefix)
+          changeVars(el, binding)
         },
         update: function (el, binding) {
           if (!binding.value) {
@@ -48,7 +45,10 @@ export default {
           const dom = binding.modifiers.root ? document.documentElement : el
           logger('cssVar updated')
           // get all cssVars in the dom
-          const styleList = dom.style.cssText.split(';').map(e => e.split(':')).filter(e => e[0] !== '')
+          const styleList = dom.style.cssText
+              .split(';')
+              .map(e => e.split(':'))
+              .filter(e => e[0] !== '' && e[0].startsWith('--'))
           const vars = Object.entries(binding.value)
           // 更新当前变量
           if (vars.length > 0) {
@@ -56,7 +56,7 @@ export default {
               const {
                 varsName,
                 varsValue
-              } = handleVars(k, options.prefix)
+              } = handleVars(k)
               const oldValue = document.body.style.getPropertyValue(varsName)
               if (oldValue !== varsValue) {
                 dom.style.setProperty(varsName, varsValue)
@@ -64,7 +64,7 @@ export default {
             }
           }
           for (const k of styleList) {
-            const key = options.prefix ? k[0].replace('--', '') : k[0]
+            const key = k[0].replace('--', '')
             if (!vars.find(e => e[0] === key)) {
               dom.style.removeProperty(k[0])
             }

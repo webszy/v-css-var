@@ -6,9 +6,7 @@ use CSS Variables by vue directive
 #### use it in main.js
 ```javascript
 import cssVar from 'v-css-var'
-Vue.use(cssVar,{
-    prefix: true // auto add the prefix like --
-})
+Vue.use(cssVar)
 ```
 #### basic use
 ```Vue
@@ -20,7 +18,7 @@ export default {
   data(){
     return {
       var:{
-        a:'1px'
+        a:'1px' // not suggest start with --,like '--a':'1px',but supported
       }
     }
   }
@@ -53,4 +51,5 @@ It will be transfed as
 </html>
 ```
 #### TO DO
-- [ ] remove the css Variables
+- [x] remove the css Variables
+- [ ] write the test

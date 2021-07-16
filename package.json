@@ -1,6 +1,6 @@
 {
   "name": "v-css-var",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "use CSS Variables by vue directive",
   "main": "index.js",
   "scripts": {
